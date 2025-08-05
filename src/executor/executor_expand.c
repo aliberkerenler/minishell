@@ -55,19 +55,31 @@ static int	process_variable_expansion(const char *str, char *result,
 	return (1);
 }
 
-char	*expand_variables(const char *str, t_shell *shell)
+char	*expand_variables_with_context(const char *str, t_shell *shell)
 {
 	char	*result;
 	int		counters[2];
+	char	current_quote;
 
 	result = (char *)malloc(calculate_expanded_len(str, shell) + 1);
 	if (!result)
 		return (NULL);
 	counters[0] = 0;
 	counters[1] = 0;
+	current_quote = 0;
 	while (str[counters[0]])
 	{
-		if (str[counters[0]] == '$' && str[counters[0] + 1])
+		if ((str[counters[0]] == '\'' || str[counters[0]] == '"') && current_quote == 0)
+		{
+			current_quote = str[counters[0]];
+			counters[0]++;
+		}
+		else if (str[counters[0]] == current_quote && current_quote != 0)
+		{
+			current_quote = 0;
+			counters[0]++;
+		}
+		else if (str[counters[0]] == '$' && str[counters[0] + 1] && current_quote != '\'')
 		{
 			if (!process_variable_expansion(str, result, counters, shell))
 				result[counters[1]++] = str[counters[0]++];
@@ -79,6 +91,35 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
+char	*expand_variables_with_quotes(const char *str, t_shell *shell, char quote_type)
+{
+	char	*result;
+	int		counters[2];
+
+	result = (char *)malloc(calculate_expanded_len(str, shell) + 1);
+	if (!result)
+		return (NULL);
+	counters[0] = 0;
+	counters[1] = 0;
+	while (str[counters[0]])
+	{
+		if (str[counters[0]] == '$' && str[counters[0] + 1] && quote_type != '\'')
+		{
+			if (!process_variable_expansion(str, result, counters, shell))
+				result[counters[1]++] = str[counters[0]++];
+		}
+		else
+			result[counters[1]++] = str[counters[0]++];
+	}
+	result[counters[1]] = '\0';
+	return (result);
+}
+
+char	*expand_variables(const char *str, t_shell *shell)
+{
+	return (expand_variables_with_context(str, shell));
+}
+
 static void	process_argument_expansion(char *arg, char **new_args,
 										int *new_count, t_shell *shell)
 {
@@ -87,13 +128,11 @@ static void	process_argument_expansion(char *arg, char **new_args,
 	if (ft_strchr(arg, '$'))
 	{
 		expanded = expand_variables(arg, shell);
-		if (expanded && ft_strlen(expanded) > 0)
+		if (expanded)
 		{
 			new_args[*new_count] = expanded;
 			(*new_count)++;
 		}
-		else if (expanded)
-			free(expanded);
 	}
 	else
 	{

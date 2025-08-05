@@ -19,6 +19,8 @@ char	*get_env_value(const char *var_name, t_shell *shell)
 
 	if (ft_strcmp(var_name, "?") == 0)
 		return (ft_itoa(shell->last_exit_status));
+	if (ft_strcmp(var_name, "$") == 0)
+		return (ft_itoa(getpid()));
 	index = find_env_index(var_name, shell);
 	if (index == -1)
 		return (ft_strdup(""));

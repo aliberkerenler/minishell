@@ -23,6 +23,8 @@ void	cleanup_parent_pipes(int in_fd, int *pipe_fd, t_command *cmd);
 
 void	expand_command_args(t_command *cmd, t_shell *shell);
 char	*expand_variables(const char *str, t_shell *shell);
+char	*expand_variables_with_quotes(const char *str, t_shell *shell, char quote_type);
+char	*expand_variables_with_context(const char *str, t_shell *shell);
 
 char	*get_env_value(const char *var_name, t_shell *shell);
 int		get_var_name_len(const char *str);
