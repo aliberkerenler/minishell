@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_words.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aerenler <aerenler@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:59:51 by aerenler          #+#    #+#             */
-/*   Updated: 2025/07/29 14:59:51 by aerenler         ###   ########.fr       */
+/*   Updated: 2025/08/20 17:32:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ int	build_word_token(const char *input, int start, t_token **tokens)
 {
 	char	*word_parts[256];
 	int		part_count;
+	char	quote_char;
 	int		i;
 
 	part_count = 0;
 	i = start;
+	quote_char = 0;
+	if (input[i] == '\'' || input[i] == '"')
+		quote_char = input[i];
 	while (input[i] && !ft_strchr(" \t\n\v\f\r|<>", input[i]))
 	{
 		if (input[i] == '\'' || input[i] == '"')
@@ -89,6 +93,6 @@ int	build_word_token(const char *input, int start, t_token **tokens)
 		else
 			word_parts[part_count++] = get_unquoted_part(input, &i);
 	}
-	finalize_word(tokens, word_parts, part_count, 0);
+	finalize_word(tokens, word_parts, part_count, quote_char);
 	return (i);
 }

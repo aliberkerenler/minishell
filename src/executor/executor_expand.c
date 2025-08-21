@@ -121,18 +121,20 @@ char	*expand_variables(const char *str, t_shell *shell)
 }
 
 static void	process_argument_expansion(char *arg, char **new_args,
-										int *new_count, t_shell *shell)
+										int *new_count, t_shell *shell, char quote_type)
 {
 	char	*expanded;
 
 	if (ft_strchr(arg, '$'))
 	{
-		expanded = expand_variables(arg, shell);
-		if (expanded)
+		expanded = expand_variables_with_quotes(arg, shell, quote_type);
+		if (expanded && *expanded)
 		{
 			new_args[*new_count] = expanded;
 			(*new_count)++;
 		}
+		else if (expanded)
+			free(expanded);
 	}
 	else
 	{
@@ -156,7 +158,7 @@ void	expand_command_args(t_command *cmd, t_shell *shell)
 	i = 0;
 	while (cmd->args[i])
 	{
-		process_argument_expansion(cmd->args[i], new_args, &new_count, shell);
+		process_argument_expansion(cmd->args[i], new_args, &new_count, shell, cmd->quote_types[i]);
 		i++;
 	}
 	new_args[new_count] = NULL;
