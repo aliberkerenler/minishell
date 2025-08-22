@@ -22,13 +22,6 @@ int	read_heredoc_content(const char *delimiter, int fd)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal_status == SIGINT)
-		{
-			if (line)
-				free(line);
-			restore_interactive_signals();
-			return (-1);
-		}
 		if (!line)
 		{
 			write(STDERR_FILENO, "minishell: warning: ", 20);
@@ -69,7 +62,30 @@ int	handle_heredoc(t_redir *redir, t_shell *shell)
 		free(tempfile);
 		return (-1);
 	}
-	return (open_and_redirect_heredoc(tempfile));
+	return (0);
+}
+
+static int	redirect_last_heredoc(t_command *cmd, t_shell *shell)
+{
+	t_redir	*current;
+	t_redir	*last_heredoc;
+
+	if (!cmd || !shell)
+		return (0);
+	last_heredoc = NULL;
+	current = cmd->redirs;
+	while (current)
+	{
+		if (current->type == HEREDOC)
+			last_heredoc = current;
+		current = current->next;
+	}
+	if (last_heredoc && shell->tempfile_count > 0)
+	{
+		return (open_and_redirect_heredoc(
+				shell->heredoc_tempfiles[shell->tempfile_count - 1]));
+	}
+	return (0);
 }
 
 int	setup_heredoc(t_command *cmd, t_shell *shell)
@@ -88,5 +104,5 @@ int	setup_heredoc(t_command *cmd, t_shell *shell)
 		}
 		current = current->next;
 	}
-	return (0);
+	return (redirect_last_heredoc(cmd, shell));
 }

@@ -15,15 +15,15 @@
 int	check_and_handle_eof(char *input)
 {
 	if (input == NULL)
+	{
+		write(STDERR_FILENO, "exit\n", 5);
 		return (1);
+	}
 	return (0);
 }
 
-static void	handle_execution_signal(void *shell_ptr)
+static void	handle_execution_signal(t_shell *shell)
 {
-	t_shell	*shell;
-
-	shell = (t_shell *)shell_ptr;
 	if (g_signal_status == SIGINT)
 		shell->last_exit_status = 130;
 	else if (g_signal_status == SIGQUIT)
@@ -33,11 +33,8 @@ static void	handle_execution_signal(void *shell_ptr)
 	}
 }
 
-static void	handle_heredoc_signal(void *shell_ptr)
+static void	handle_heredoc_signal(t_shell *shell)
 {
-	t_shell	*shell;
-
-	shell = (t_shell *)shell_ptr;
 	if (g_signal_status == SIGINT)
 	{
 		shell->last_exit_status = 130;
@@ -45,13 +42,13 @@ static void	handle_heredoc_signal(void *shell_ptr)
 	}
 }
 
-void	handle_signal_in_main_loop(void *shell_ptr, t_shell_state state)
+void	handle_signal_in_main_loop(t_shell *shell, t_shell_state state)
 {
 	if (g_signal_status == 0)
 		return ;
 	if (state == SHELL_EXECUTING)
-		handle_execution_signal(shell_ptr);
+		handle_execution_signal(shell);
 	else if (state == SHELL_HEREDOC)
-		handle_heredoc_signal(shell_ptr);
+		handle_heredoc_signal(shell);
 	g_signal_status = 0;
 }

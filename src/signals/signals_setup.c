@@ -18,12 +18,6 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	ignore_signals_for_parent(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 void	restore_signals_after_execution(void)
 {
 	init_interactive_signals();

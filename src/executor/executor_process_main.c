@@ -81,10 +81,24 @@ int	execute_commands(t_command *cmd, t_shell *shell)
 		return (0);
 	if (!cmd->next_command && is_builtin(cmd->args[0]))
 	{
+		int	saved_stdin, saved_stdout;
+		
 		expand_command_args(cmd, shell);
 		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
 			return (0);
+		if (save_std_fds(&saved_stdin, &saved_stdout) == -1)
+			return (1);
+		if (setup_redirections(cmd, shell) != 0)
+		{
+			restore_std_fds(saved_stdin, saved_stdout);
+			close(saved_stdin);
+			close(saved_stdout);
+			return (1);
+		}
 		status = execute_parent_builtin(cmd, shell);
+		restore_std_fds(saved_stdin, saved_stdout);
+		close(saved_stdin);
+		close(saved_stdout);
 		if (status != -1)
 		{
 			shell->last_exit_status = status;

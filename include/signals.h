@@ -28,7 +28,7 @@ void	init_interactive_signals(void);
 void	init_execution_signals(void);
 void	init_heredoc_signals(void);
 void	restore_interactive_signals(void);
-void	handle_signal_in_main_loop(void *shell_ptr, t_shell_state state);
+void	handle_signal_in_main_loop(t_shell *shell, t_shell_state state);
 void	setup_child_signals(void);
 void	ignore_signals_for_parent(void);
 void	restore_signals_after_execution(void);
