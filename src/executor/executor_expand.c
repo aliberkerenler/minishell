@@ -21,6 +21,12 @@ static size_t	calculate_expanded_len(const char *str, t_shell *shell)
 	i = 0;
 	while (str[i])
 	{
+		/* skip internal boundary sentinel */
+		if (str[i] == '\1')
+		{
+			i++;
+			continue ;
+		}
 		if (str[i] == '$' && str[i + 1])
 			len += process_variable_length(str, &i, shell);
 		else
@@ -128,13 +134,24 @@ static void	process_argument_expansion(char *arg, char **new_args,
 	if (ft_strchr(arg, '$'))
 	{
 		expanded = expand_variables_with_quotes(arg, shell, quote_type);
-		if (expanded && *expanded)
+		/*
+		 * Shell semantics:
+		 * - Unquoted empty expansions are removed (arg disappears)
+		 * - Quoted (single or double) empty expansions produce an empty argument
+		 *   (echo "" -> one empty arg) (echo '' -> one empty arg)
+		 * - Single quotes prevent expansion; we already avoided replacing $ inside
+		 */
+		if (expanded)
 		{
-			new_args[*new_count] = expanded;
-			(*new_count)++;
+			if (*expanded || quote_type != 0)
+			{
+				/* keep arg even if empty when originally quoted */
+				new_args[*new_count] = expanded;
+				(*new_count)++;
+			}
+			else
+				free(expanded); /* unquoted & became empty: drop */
 		}
-		else if (expanded)
-			free(expanded);
 	}
 	else
 	{

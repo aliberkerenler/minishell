@@ -30,6 +30,8 @@ char	*get_env_value(const char *var_name, t_shell *shell)
 	return (ft_strdup(eq_ptr + 1));
 }
 
+/* get_var_name_len stops at our internal VAR_BOUNDARY (\1) so concatenated
+ * word parts don't merge into the variable name. */
 int	get_var_name_len(const char *str)
 {
 	int	i;
@@ -37,9 +39,11 @@ int	get_var_name_len(const char *str)
 	i = 0;
 	if (str[i] == '?' || str[i] == '$')
 		return (1);
-	if (!ft_isalpha(str[i]) && str[i] != '_')
+	if (str[i] == '\1')
 		return (0);
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+	if (!ft_isalpha((unsigned char)str[i]) && str[i] != '_')
+		return (0);
+	while (str[i] && str[i] != '\1' && (ft_isalnum((unsigned char)str[i]) || str[i] == '_'))
 		i++;
 	return (i);
 }
@@ -69,13 +73,22 @@ size_t	process_variable_length(const char *str, int *i, t_shell *shell)
 	}
 }
 
+static void	strip_and_copy(char *result, int *j, const char *src)
+{
+	int k = 0;
+	while (src[k])
+	{
+		if (src[k] != '\1')
+			result[(*j)++] = src[k];
+		k++;
+	}
+}
+
 void	append_var(char *result, int *j, char *value)
 {
-	if (ft_strlen(value) > 0)
-	{
-		ft_strlcpy(result + *j, value, ft_strlen(value) + 1);
-		*j += ft_strlen(value);
-	}
+	if (*value == '\0')
+		return ;
+	strip_and_copy(result, j, value);
 }
 
 int	ft_strcmp(const char *s1, const char *s2)

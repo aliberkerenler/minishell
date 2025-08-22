@@ -90,6 +90,8 @@ int	execute_commands(t_command *cmd, t_shell *shell)
 			return (1);
 		if (setup_redirections(cmd, shell) != 0)
 		{
+			/* Ensure $? reflects redirection failure just like bash (exit status 1) */
+			shell->last_exit_status = 1;
 			restore_std_fds(saved_stdin, saved_stdout);
 			close(saved_stdin);
 			close(saved_stdout);
