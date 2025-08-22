@@ -14,12 +14,13 @@
 
 int	check_and_handle_eof(char *input)
 {
-	if (input == NULL)
-	{
-		write(STDERR_FILENO, "exit\n", 5);
-		return (1);
-	}
-	return (0);
+		if (input == NULL)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDERR_FILENO, "exit\n", 5);
+			return (1);
+		}
+		return (0);
 }
 
 static void	handle_execution_signal(t_shell *shell)

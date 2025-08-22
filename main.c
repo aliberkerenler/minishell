@@ -88,7 +88,7 @@ static void	process_and_execute(char *input, t_shell *shell)
 		free_token_list(tokens);
 		return ;
 	}
-	execute_commands(commands, shell);
+	shell->last_exit_status = execute_commands(commands, shell);
 	free_token_list(tokens);
 	free_command_list(commands);
 }
