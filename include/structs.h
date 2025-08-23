@@ -46,12 +46,10 @@ typedef struct s_command
 	struct s_command	*next_command;
 }	t_command;
 
-typedef struct s_exec_context
+typedef struct s_expansion_context
 {
-	int	saved_stdin;
-	int	saved_stdout;
-	int	prev_pipe_read;
-	int	pipe_fd[2];
-}	t_exec_context;
+	char	**new_args;
+	int		*new_count;
+}	t_expansion_context;
 
 #endif

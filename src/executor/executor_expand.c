@@ -86,9 +86,8 @@ char	*expand_variables_with_quotes(const char *str, t_shell *shell,
 	return (result);
 }
 
-static void	process_argument_expansion(char *arg, char **new_args,
-										int *new_count, t_shell *shell,
-										char quote_type)
+static void	process_argument_expansion(char *arg, char quote_type,
+		t_shell *shell, t_expansion_context *context)
 {
 	char	*expanded;
 
@@ -99,8 +98,8 @@ static void	process_argument_expansion(char *arg, char **new_args,
 		{
 			if (*expanded || quote_type != 0)
 			{
-				new_args[*new_count] = expanded;
-				(*new_count)++;
+				context->new_args[*(context->new_count)] = expanded;
+				(*(context->new_count))++;
 			}
 			else
 				free(expanded);
@@ -108,28 +107,31 @@ static void	process_argument_expansion(char *arg, char **new_args,
 	}
 	else
 	{
-		new_args[*new_count] = ft_strdup(arg);
-		(*new_count)++;
+		context->new_args[*(context->new_count)] = ft_strdup(arg);
+		(*(context->new_count))++;
 	}
 }
 
 void	expand_command_args(t_command *cmd, t_shell *shell)
 {
-	int		i;
-	int		arg_count;
-	char	**new_args;
-	int		new_count;
+	int					i;
+	int					arg_count;
+	t_expansion_context	context;
+	char				**new_args;
+	int					new_count;
 
 	arg_count = count_args(cmd->args);
 	new_args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!new_args)
 		return ;
 	new_count = 0;
+	context.new_args = new_args;
+	context.new_count = &new_count;
 	i = 0;
 	while (cmd->args[i])
 	{
-		process_argument_expansion(cmd->args[i], new_args, &new_count, shell,
-			cmd->quote_types[i]);
+		process_argument_expansion(cmd->args[i], cmd->quote_types[i],
+			shell, &context);
 		i++;
 	}
 	new_args[new_count] = NULL;
