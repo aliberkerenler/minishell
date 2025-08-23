@@ -20,6 +20,7 @@ SRCS = 	main.c \
 		src/parser/tokenizer.c \
 		src/parser/tokenizer_utils.c \
 		src/parser/tokenizer_words.c \
+		src/parser/handle_word.c \
 		src/parser/assignment_handler.c \
 		src/executor/executor_var_utils.c \
 		src/executor/executor_expand.c \

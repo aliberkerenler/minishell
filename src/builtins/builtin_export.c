@@ -19,8 +19,8 @@ static char	*strip_quotes(const char *str)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	if (len >= 2 && ((str[0] == '"' && str[len - 1] == '"') || \
-		(str[0] == '\'' && str[len - 1] == '\'')))
+	if (len >= 2 && ((str[0] == '"' && str[len - 1] == '"')
+			|| (str[0] == '\'' && str[len - 1] == '\'')))
 	{
 		return (ft_substr(str, 1, len - 2));
 	}

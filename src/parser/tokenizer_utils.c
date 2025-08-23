@@ -67,3 +67,29 @@ void	free_token_list(t_token *tokens)
 		tokens = tmp;
 	}
 }
+
+int	is_valid_suffix_var(const char *str)
+{
+	int	i;
+
+	i = ft_strlen(str) - 1;
+	while (i >= 0 && str[i] != '$')
+		i--;
+	if (i < 0)
+		return (0);
+	i++;
+	if (!str[i])
+		return (0);
+	if (!(ft_isalpha((unsigned char)str[i]) || str[i] == '_'
+			|| str[i] == '?' || str[i] == '$'))
+		return (0);
+	if (str[i] == '?' || str[i] == '$')
+		return (1);
+	while (str[i])
+	{
+		if (!(ft_isalnum((unsigned char)str[i]) || str[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
+}

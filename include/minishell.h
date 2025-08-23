@@ -13,7 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-typedef struct s_shell {
+typedef struct s_shell
+{
 	char	**envp;
 	int		last_exit_status;
 	char	*pwd;
@@ -21,7 +22,5 @@ typedef struct s_shell {
 	char	**heredoc_tempfiles;
 	int		tempfile_count;
 }	t_shell;
-
-void	signal_handler(int signum);
 
 #endif

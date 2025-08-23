@@ -22,42 +22,17 @@ int	count_args(char **args)
 	return (count);
 }
 
-void	free_old_args(char **old_args)
+void	free_str_array(char **arr)
 {
 	int	i;
 
-	if (!old_args)
+	if (!arr)
 		return ;
 	i = 0;
-	while (old_args[i])
+	while (arr[i])
 	{
-		free(old_args[i]);
+		free(arr[i]);
 		i++;
 	}
-	free(old_args);
-}
-
-int	count_str_array(char **array)
-{
-	int	count;
-
-	count = 0;
-	while (array && array[count])
-		count++;
-	return (count);
-}
-
-void	ft_free_split(char **split_array)
-{
-	int	i;
-
-	if (!split_array)
-		return ;
-	i = 0;
-	while (split_array[i])
-	{
-		free(split_array[i]);
-		i++;
-	}
-	free(split_array);
+	free(arr);
 }

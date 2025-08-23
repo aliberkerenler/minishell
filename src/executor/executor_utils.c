@@ -51,7 +51,7 @@ char	*get_command_path(const char *cmd)
 	paths = ft_split(path_env, ':');
 	result = search_in_path(cmd, paths);
 	if (paths)
-		ft_free_split(paths);
+		free_str_array(paths);
 	return (result);
 }
 
@@ -76,13 +76,4 @@ int	is_builtin(char *cmd)
 		i++;
 	}
 	return (0);
-}
-
-void	setup_pipes(t_exec_context *ctx, int is_last_cmd)
-{
-	if (ctx->prev_pipe_read != -1 && !is_last_cmd)
-	{
-		close(ctx->prev_pipe_read);
-		ctx->prev_pipe_read = -1;
-	}
 }

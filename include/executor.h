@@ -22,9 +22,8 @@ void	setup_child_pipes(int in_fd, int *pipe_fd, t_command *cmd);
 void	cleanup_parent_pipes(int in_fd, int *pipe_fd, t_command *cmd);
 
 void	expand_command_args(t_command *cmd, t_shell *shell);
-char	*expand_variables(const char *str, t_shell *shell);
-char	*expand_variables_with_quotes(const char *str, t_shell *shell, char quote_type);
-char	*expand_variables_with_context(const char *str, t_shell *shell);
+char	*expand_variables_with_quotes(const char *str, t_shell *shell,
+			char quote_type);
 
 char	*get_env_value(const char *var_name, t_shell *shell);
 int		get_var_name_len(const char *str);
@@ -37,11 +36,9 @@ void	execute_child_builtin(t_command *cmd, t_shell *shell);
 char	*get_command_path(const char *cmd);
 void	handle_execution_error(const char *cmd_name);
 int		is_builtin(char *cmd);
-void	ft_free_split(char **split_array);
 
 int		count_args(char **args);
-void	free_old_args(char **old_args);
-int		count_str_array(char **array);
+void	free_str_array(char **arr);
 
 int		ft_strcmp(const char *s1, const char *s2);
 
