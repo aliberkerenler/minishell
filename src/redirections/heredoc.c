@@ -92,8 +92,6 @@ int	setup_heredoc(t_command *cmd, t_shell *shell)
 {
 	t_redir	*current;
 
-	if (!cmd)
-		return (0);
 	current = cmd->redirs;
 	while (current)
 	{

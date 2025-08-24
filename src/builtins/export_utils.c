@@ -47,7 +47,7 @@ static void	print_export_line(const char *env_var)
 	}
 	else
 	{
-		printf("declare -x %s=\"\"\n", env_var);
+		printf("declare -x %s\n", env_var);
 	}
 }
 

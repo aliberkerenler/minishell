@@ -51,5 +51,10 @@ void	handle_signal_in_main_loop(t_shell *shell, t_shell_state state)
 		handle_execution_signal(shell);
 	else if (state == SHELL_HEREDOC)
 		handle_heredoc_signal(shell);
+	else
+	{
+		if (g_signal_status == SIGINT)
+			shell->last_exit_status = 130;
+	}
 	g_signal_status = 0;
 }
