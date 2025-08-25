@@ -16,8 +16,7 @@ int	check_and_handle_eof(char *input)
 {
 	if (input == NULL)
 	{
-		if (isatty(STDIN_FILENO))
-			write(STDERR_FILENO, "exit\n", 5);
+		write(STDERR_FILENO, "exit\n", 5);
 		return (1);
 	}
 	return (0);
