@@ -41,29 +41,6 @@ void	append_command(t_command **list, t_command *new_cmd)
 	current->next_command = new_cmd;
 }
 
-void	append_redir(t_command *cmd, t_token **current_token)
-{
-	t_redir	*redir;
-	t_redir	*current;
-
-	redir = (t_redir *)malloc(sizeof(t_redir));
-	if (!redir)
-		return ;
-	redir->type = (*current_token)->type;
-	*current_token = (*current_token)->next;
-	redir->file = ft_strdup((*current_token)->value);
-	redir->next = NULL;
-	if (!cmd->redirs)
-		cmd->redirs = redir;
-	else
-	{
-		current = cmd->redirs;
-		while (current->next)
-			current = current->next;
-		current->next = redir;
-	}
-}
-
 int	count_arg(t_token *start, t_token *end)
 {
 	int	count;

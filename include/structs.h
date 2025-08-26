@@ -34,6 +34,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	char			*file;
+	char			quote_type;
 	t_token_type	type;
 	struct s_redir	*next;
 }	t_redir;

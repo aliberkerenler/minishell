@@ -54,21 +54,41 @@ int	add_tempfile_to_shell(t_shell *shell, char *tempfile)
 	return (0);
 }
 
-int	check_delimiter(char *line, const char *delimiter, int len)
+int	read_content_loop(t_redir *redir, int fd, t_shell *shell)
 {
-	if (ft_strlen(line) == len && ft_strncmp(line, delimiter, len) == 0)
-		return (1);
-	return (0);
+	char	*line;
+	int		delimiter_len;
+
+	if (!redir || !redir->file)
+		return (-1);
+	delimiter_len = ft_strlen(redir->file);
+	line = readline("> ");
+	if (!line)
+	{
+		write(STDERR_FILENO, "minishell: warning: here-document delimited by EOF\n", 52);
+		return (0);
+	}
+	if (ft_strlen(line) == delimiter_len && ft_strncmp(line, redir->file, delimiter_len) == 0)
+	{
+		free(line);
+		return (0);
+	}
+	if (redir->quote_type == 0)
+		line = expand_heredoc_line(line, shell);
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
+	free(line);
+	return (1);
 }
 
-int	open_and_write_heredoc(char *tempfile, t_redir *redir)
+int	open_and_write_heredoc(char *tempfile, t_redir *redir, t_shell *shell)
 {
 	int	temp_fd;
 
 	temp_fd = open(tempfile, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (temp_fd == -1)
 		return (-1);
-	if (read_heredoc_content(redir->file, temp_fd) == -1)
+	if (read_heredoc_content(redir, temp_fd, shell) == -1)
 	{
 		close(temp_fd);
 		return (-1);

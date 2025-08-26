@@ -30,7 +30,6 @@ int			check_syntax(t_token *tokens);
 void		free_command_list(t_command *cmds);
 
 t_command	*create_cmd_node(void);
-void		append_redir(t_command *cmd, t_token **current_token);
 int			count_arg(t_token *start, t_token *end);
 void		fill_args(t_command *cmd, t_token **start, t_token *end);
 void		append_command(t_command **list, t_command *new_cmd);

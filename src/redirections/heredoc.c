@@ -12,30 +12,33 @@
 
 #include "../../include/main.h"
 
-int	read_heredoc_content(const char *delimiter, int fd)
+char	*expand_heredoc_line(char *line, t_shell *shell)
 {
-	char	*line;
-	int		delimiter_len;
+	char	*expanded;
 
-	delimiter_len = ft_strlen(delimiter);
+	if (!line)
+		return (NULL);
+	if (!ft_strchr(line, '$'))
+		return (line);
+	expanded = expand_variables_with_quotes(line, shell, 0);
+	if (!expanded)
+		return (line);
+	free(line);
+	return (expanded);
+}
+
+int	read_heredoc_content(t_redir *redir, int fd, t_shell *shell)
+{
+	int		ret;
+
+	if (!redir || !redir->file)
+		return (-1);
 	init_heredoc_signals();
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
-		{
-			write(STDERR_FILENO, "minishell: warning: ", 20);
-			write(STDERR_FILENO, "here-document delimited by EOF\n", 32);
+		ret = read_content_loop(redir, fd, shell);
+		if (ret == 0)
 			break ;
-		}
-		if (check_delimiter(line, delimiter, delimiter_len))
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
 	}
 	restore_interactive_signals();
 	return (0);
@@ -50,7 +53,7 @@ int	handle_heredoc(t_redir *redir, t_shell *shell)
 	tempfile = get_heredoc_tempfile();
 	if (!tempfile)
 		return (-1);
-	if (open_and_write_heredoc(tempfile, redir) == -1)
+	if (open_and_write_heredoc(tempfile, redir, shell) == -1)
 	{
 		unlink(tempfile);
 		free(tempfile);
