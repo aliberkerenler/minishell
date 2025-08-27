@@ -38,6 +38,7 @@ SRCS = 	main.c \
 		src/redirections/redir_utils.c \
 		src/redirections/heredoc.c \
 		src/redirections/heredoc_utils.c \
+		src/redirections/heredoc_helpers.c \
 		src/signals/signals.c \
 		src/signals/signals_utils.c \
 		src/signals/signals_setup.c

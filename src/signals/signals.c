@@ -32,7 +32,6 @@ void	heredoc_sigint_handler(int signum)
 {
 	g_signal_status = signum;
 	write(STDOUT_FILENO, "\n", 1);
-	exit(130);
 }
 
 void	init_interactive_signals(void)

@@ -28,6 +28,7 @@ int		read_content_loop(t_redir *redir, int fd, t_shell *shell);
 int		open_and_write_heredoc(char *tempfile, t_redir *redir, t_shell *shell);
 int		open_and_redirect_heredoc(char *tempfile);
 char	*expand_heredoc_line(char *line, t_shell *shell);
+int		loop_util(t_redir *redir, int fd, t_shell *shell, char *line);
 
 int		setup_redirections(t_command *cmd, t_shell *shell);
 int		restore_std_fds(int saved_stdin, int saved_stdout);

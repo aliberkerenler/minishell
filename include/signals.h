@@ -13,6 +13,7 @@
 #ifndef SIGNALS_H
 # define SIGNALS_H
 
+# include "main.h"
 # include <signal.h>
 
 typedef enum e_shell_state

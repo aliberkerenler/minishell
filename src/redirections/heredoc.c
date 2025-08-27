@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/main.h"
+#include "../../include/signals.h"
 
 char	*expand_heredoc_line(char *line, t_shell *shell)
 {
@@ -29,7 +30,7 @@ char	*expand_heredoc_line(char *line, t_shell *shell)
 
 int	read_heredoc_content(t_redir *redir, int fd, t_shell *shell)
 {
-	int		ret;
+	int	ret;
 
 	if (!redir || !redir->file)
 		return (-1);
@@ -39,6 +40,12 @@ int	read_heredoc_content(t_redir *redir, int fd, t_shell *shell)
 		ret = read_content_loop(redir, fd, shell);
 		if (ret == 0)
 			break ;
+		if (ret == -1)
+		{
+			close(fd);
+			init_interactive_signals();
+			return (-1);
+		}
 	}
 	init_interactive_signals();
 	return (0);
@@ -95,6 +102,7 @@ int	setup_heredoc(t_command *cmd, t_shell *shell)
 {
 	t_redir	*current;
 
+	init_heredoc_signals();
 	current = cmd->redirs;
 	while (current)
 	{
@@ -105,5 +113,6 @@ int	setup_heredoc(t_command *cmd, t_shell *shell)
 		}
 		current = current->next;
 	}
+	init_interactive_signals();
 	return (redirect_last_heredoc(cmd, shell));
 }
