@@ -38,7 +38,7 @@ void	free_shell_resources(t_shell *shell)
 	}
 }
 
-void	init_shell(t_shell *shell, char **envp)
+static void	init_shell(t_shell *shell, char **envp)
 {
 	char	cwd[1024];
 
@@ -88,8 +88,8 @@ static void	process_and_execute(char *input, t_shell *shell)
 		free_token_list(tokens);
 		return ;
 	}
-	execute_commands(commands, shell);
 	free_token_list(tokens);
+	execute_commands(commands, shell);
 	free_command_list(commands);
 }
 
@@ -112,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		process_and_execute(input, &shell);
 	}
+	rl_clear_history();
 	free_shell_resources(&shell);
 	return (shell.last_exit_status);
 }

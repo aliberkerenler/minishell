@@ -17,7 +17,13 @@ int	save_std_fds(int *saved_stdin, int *saved_stdout)
 	*saved_stdin = dup(STDIN_FILENO);
 	*saved_stdout = dup(STDOUT_FILENO);
 	if (*saved_stdin == -1 || *saved_stdout == -1)
+	{
+		if (*saved_stdin != -1)
+			close(*saved_stdin);
+		if (*saved_stdout != -1)
+			close(*saved_stdout);
 		return (-1);
+	}
 	return (0);
 }
 

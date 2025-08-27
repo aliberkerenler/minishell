@@ -1,17 +1,11 @@
-# Programın adı
 NAME = minishell
 
-# Derleyici ve bayrakları
 CC = cc
-# CFLAGS'a libft ve diğer tüm header klasörlerinin yollarını ekliyoruz
 CFLAGS = -Wall -Wextra -Werror -Iinclude -Ilibft
 
-# libft kütüphanesinin yolu
 LIBFT_A = libft/libft.a
-# libft'i linklemek için gereken bayraklar
 LDFLAGS = -Llibft -lft -lreadline
 
-# Derlenecek TÜM kaynak dosyaları:
 SRCS = 	main.c \
 		src/parser/parser.c \
 		src/parser/free_parser.c \
@@ -21,9 +15,9 @@ SRCS = 	main.c \
 		src/parser/tokenizer_utils.c \
 		src/parser/tokenizer_words.c \
 		src/parser/handle_word.c \
-		src/parser/assignment_handler.c \
 		src/executor/executor_var_utils.c \
 		src/executor/executor_expand.c \
+		src/executor/executor_pipeline.c \
 		src/executor/executor_process_helpers.c \
 		src/executor/executor_process_main.c \
 		src/executor/executor_builtins.c \
@@ -48,37 +42,27 @@ SRCS = 	main.c \
 		src/signals/signals_utils.c \
 		src/signals/signals_setup.c
 
-# Kaynak dosyalarından obje dosyası (.o) listesini otomatik oluştur
 OBJS = $(SRCS:.c=.o)
 
-# --- Kurallar ---
-
-# Ana kural: programı derler
 all: $(NAME)
 
-# Önce libft'i derler, sonra ana programı linkler
 $(NAME): $(LIBFT_A) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS)
 
-# libft kütüphanesini (libft.a) oluşturma kuralı
 $(LIBFT_A):
 	make -C libft
 
-# .c dosyalarını .o dosyalarına derleme kuralı
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Obje dosyalarını ve libft'in objelerini temizler
 clean:
 	make -C libft clean
 	rm -f $(OBJS)
 
-# Her şeyi temizler
 fclean: clean
 	make -C libft fclean
 	rm -f $(NAME)
 
-# Her şeyi temizleyip yeniden derler
 re: fclean all
 
 .PHONY: all clean fclean re

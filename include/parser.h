@@ -15,9 +15,6 @@
 
 t_token		*tokenize(const char *input);
 void		free_token_list(t_token *tokens);
-int			is_assignment_with_quotes(const char *input, int start);
-int			handle_assignment_with_quotes(const char *input,
-				int s, t_token **t);
 int			build_word_token(const char *input, int start, t_token **tokens);
 t_token		*new_token(char *value, t_token_type type);
 t_token		*new_token_with_quotes(char *val, t_token_type type, char quote);

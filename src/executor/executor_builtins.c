@@ -32,12 +32,18 @@ int	execute_parent_builtin(t_command *cmd, t_shell *shell)
 
 void	execute_child_builtin(t_command *cmd, t_shell *shell)
 {
+	int	status;
+
+	status = 0;
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		exit(builtin_echo(cmd));
+		status = builtin_echo(cmd);
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		exit(builtin_pwd());
+		status = builtin_pwd();
 	if (ft_strcmp(cmd->args[0], "env") == 0)
-		exit(builtin_env(shell));
+		status = builtin_env(shell);
 	if (ft_strcmp(cmd->args[0], "export") == 0)
-		exit(builtin_export(cmd, shell));
+		status = builtin_export(cmd, shell);
+	free_command_list(cmd);
+	free_shell_resources(shell);
+	exit(status);
 }

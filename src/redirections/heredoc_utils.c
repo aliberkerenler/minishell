@@ -65,10 +65,12 @@ int	read_content_loop(t_redir *redir, int fd, t_shell *shell)
 	line = readline("> ");
 	if (!line)
 	{
-		write(STDERR_FILENO, "minishell: warning: here-document delimited by EOF\n", 52);
+		write(STDERR_FILENO, "minishell: warning: here-document", 36);
+		write(STDERR_FILENO, "delimited by EOF\n", 18);
 		return (0);
 	}
-	if (ft_strlen(line) == delimiter_len && ft_strncmp(line, redir->file, delimiter_len) == 0)
+	if (ft_strlen(line) == delimiter_len
+		&& ft_strncmp(line, redir->file, delimiter_len) == 0)
 	{
 		free(line);
 		return (0);

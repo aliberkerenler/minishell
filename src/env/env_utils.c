@@ -37,9 +37,9 @@ void	free_env(char **envp)
 {
 	int	i;
 
-	i = 0;
 	if (!envp)
 		return ;
+	i = 0;
 	while (envp[i])
 	{
 		free(envp[i]);

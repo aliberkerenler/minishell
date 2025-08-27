@@ -57,16 +57,10 @@ int	count_arg(t_token *start, t_token *end)
 	return (count);
 }
 
-void	fill_args(t_command *cmd, t_token **start, t_token *end)
+static void	fill_arg_loop(t_command *cmd, t_token **start, t_token *end)
 {
-	int	arg_count;
 	int	i;
 
-	arg_count = count_arg(*start, end);
-	cmd->args = (char **)malloc(sizeof(char *) * (arg_count + 1));
-	cmd->quote_types = (char *)malloc(sizeof(char) * (arg_count + 1));
-	if (!cmd->args || !cmd->quote_types)
-		return ;
 	i = 0;
 	while (*start != end)
 	{
@@ -82,4 +76,24 @@ void	fill_args(t_command *cmd, t_token **start, t_token *end)
 	}
 	cmd->args[i] = NULL;
 	cmd->quote_types[i] = 0;
+}
+
+void	fill_args(t_command *cmd, t_token **start, t_token *end)
+{
+	int	arg_count;
+
+	arg_count = count_arg(*start, end);
+	cmd->args = (char **)malloc(sizeof(char *) * (arg_count + 1));
+	cmd->quote_types = (char *)malloc(sizeof(char) * (arg_count + 1));
+	if (!cmd->args || !cmd->quote_types)
+	{
+		if (cmd->args)
+			free(cmd->args);
+		if (cmd->quote_types)
+			free(cmd->quote_types);
+		cmd->args = NULL;
+		cmd->quote_types = NULL;
+		return ;
+	}
+	fill_arg_loop(cmd, start, end);
 }

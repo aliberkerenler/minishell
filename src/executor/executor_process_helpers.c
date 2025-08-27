@@ -12,7 +12,7 @@
 
 #include "../include/main.h"
 
-static void	handle_execve_error(t_command *cmd, char *cmd_path)
+static void	handle_execve_error(t_command *cmd, char *cmd_path, t_shell *shell)
 {
 	if (errno == EACCES)
 	{
@@ -20,18 +20,24 @@ static void	handle_execve_error(t_command *cmd, char *cmd_path)
 		ft_putstr_fd(cmd->args[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
 		free(cmd_path);
-		exit(126);
+		free_command_list(cmd);
+		free_shell_resources(shell);
+		_exit(126);
 	}
 	else if (errno == ENOEXEC)
 	{
 		free(cmd_path);
-		exit(0);
+		free_command_list(cmd);
+		free_shell_resources(shell);
+		_exit(0);
 	}
 	else
 	{
 		perror(cmd->args[0]);
 		free(cmd_path);
-		exit(126);
+		free_command_list(cmd);
+		free_shell_resources(shell);
+		_exit(126);
 	}
 }
 
@@ -43,10 +49,12 @@ void	execute_external_command(t_command *cmd, t_shell *shell)
 	if (!cmd_path)
 	{
 		handle_execution_error(cmd->args[0]);
+		free_command_list(cmd);
+		free_shell_resources(shell);
 		exit(127);
 	}
 	execve(cmd_path, cmd->args, shell->envp);
-	handle_execve_error(cmd, cmd_path);
+	handle_execve_error(cmd, cmd_path, shell);
 }
 
 void	setup_child_pipes(int in_fd, int *pipe_fd, t_command *cmd)

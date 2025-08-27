@@ -53,4 +53,11 @@ typedef struct s_expansion_context
 	int		*new_count;
 }	t_expansion_context;
 
+typedef struct s_pipeline_data
+{
+	t_command	*head;
+	int			in_fd;
+	int			pipe_fd[2];
+}	t_pipeline_data;
+
 #endif

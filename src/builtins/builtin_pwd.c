@@ -18,7 +18,8 @@ int	builtin_pwd(void)
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		printf("%s\n", cwd);
+		write(1, cwd, strlen(cwd));
+		write(1, "\n", 1);
 		return (0);
 	}
 	else

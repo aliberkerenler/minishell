@@ -15,15 +15,16 @@
 
 int		execute_commands(t_command *cmd, t_shell *shell);
 int		execute_pipeline(t_command *cmd, t_shell *shell);
-void	child_process_execution(t_command *cmd, t_shell *shell);
 
 void	execute_external_command(t_command *cmd, t_shell *shell);
 void	setup_child_pipes(int in_fd, int *pipe_fd, t_command *cmd);
 void	cleanup_parent_pipes(int in_fd, int *pipe_fd, t_command *cmd);
 
-void	expand_command_args(t_command *cmd, t_shell *shell);
+int		expand_command_args(t_command *cmd, t_shell *shell);
 char	*expand_variables_with_quotes(const char *str, t_shell *shell,
 			char quote_type);
+void	process_argument_expansion(char *arg, char quote_type,
+			t_shell *shell, t_expansion_context *context);
 
 char	*get_env_value(const char *var_name, t_shell *shell);
 int		get_var_name_len(const char *str);
@@ -36,6 +37,8 @@ void	execute_child_builtin(t_command *cmd, t_shell *shell);
 char	*get_command_path(const char *cmd);
 void	handle_execution_error(const char *cmd_name);
 int		is_builtin(char *cmd);
+int		expand_loop(t_command *cmd, t_shell *shell,
+			t_expansion_context *context);
 
 int		count_args(char **args);
 void	free_str_array(char **arr);

@@ -61,7 +61,7 @@ int	builtin_exit(t_command *cmd, t_shell *shell)
 {
 	int	status;
 
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	if (!cmd->args[1])
 	{
 		status = shell->last_exit_status;

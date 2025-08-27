@@ -43,11 +43,17 @@ static void	print_export_line(const char *env_var)
 	if (eq_ptr)
 	{
 		key_len = eq_ptr - env_var;
-		printf("declare -x %.*s=\"%s\"\n", key_len, env_var, eq_ptr + 1);
+		write(1, "declare -x ", 11);
+		write(1, env_var, key_len);
+		write(1, "=\"", 2);
+		write(1, eq_ptr + 1, ft_strlen(eq_ptr + 1));
+		write(1, "\"\n", 2);
 	}
 	else
 	{
-		printf("declare -x %s\n", env_var);
+		write(1, "declare -x ", 11);
+		write(1, env_var, ft_strlen(env_var));
+		write(1, "\n", 1);
 	}
 }
 

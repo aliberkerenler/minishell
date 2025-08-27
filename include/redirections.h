@@ -25,7 +25,7 @@ int		read_heredoc_content(t_redir *redir, int fd, t_shell *shell);
 char	*get_heredoc_tempfile(void);
 int		add_tempfile_to_shell(t_shell *shell, char *tempfile);
 int		read_content_loop(t_redir *redir, int fd, t_shell *shell);
-int	    open_and_write_heredoc(char *tempfile, t_redir *redir, t_shell *shell);
+int		open_and_write_heredoc(char *tempfile, t_redir *redir, t_shell *shell);
 int		open_and_redirect_heredoc(char *tempfile);
 char	*expand_heredoc_line(char *line, t_shell *shell);
 
