@@ -50,6 +50,7 @@ char	*get_command_path(const char *cmd, t_shell *shell)
 		return (NULL);
 	paths = ft_split(path_env, ':');
 	result = search_in_path(cmd, paths);
+	free(path_env);
 	if (paths)
 		free_str_array(paths);
 	return (result);
