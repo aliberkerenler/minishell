@@ -18,16 +18,6 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	restore_signals_after_execution(void)
-{
-	init_interactive_signals();
-}
-
-void	restore_interactive_signals(void)
-{
-	init_interactive_signals();
-}
-
 void	init_heredoc_signals(void)
 {
 	struct sigaction	sa_int;

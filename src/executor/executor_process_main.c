@@ -95,7 +95,7 @@ int	execute_commands(t_command *cmd, t_shell *shell)
 	}
 	init_execution_signals();
 	status = execute_pipeline(cmd, shell);
-	restore_signals_after_execution();
+	init_interactive_signals();
 	handle_signal_in_main_loop(shell, SHELL_EXECUTING);
 	shell->last_exit_status = status;
 	return (status);

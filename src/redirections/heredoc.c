@@ -40,7 +40,7 @@ int	read_heredoc_content(t_redir *redir, int fd, t_shell *shell)
 		if (ret == 0)
 			break ;
 	}
-	restore_interactive_signals();
+	init_interactive_signals();
 	return (0);
 }
 
