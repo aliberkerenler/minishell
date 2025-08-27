@@ -20,7 +20,10 @@ int	builtin_env(t_shell *shell)
 	while (shell->envp && shell->envp[i])
 	{
 		if (ft_strchr(shell->envp[i], '='))
-			printf("%s\n", shell->envp[i]);
+		{
+			write(1, shell->envp[i], strlen(shell->envp[i]));
+			write(1, "\n", 1);
+		}
 		i++;
 	}
 	return (0);

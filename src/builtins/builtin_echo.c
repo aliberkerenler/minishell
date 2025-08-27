@@ -12,6 +12,18 @@
 
 #include "../include/main.h"
 
+static int	is_valid_n_flag(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 2;
+	while (arg[i] == 'n')
+		i++;
+	return (arg[i] == '\0');
+}
+
 int	builtin_echo(t_command *cmd)
 {
 	int	i;
@@ -19,19 +31,19 @@ int	builtin_echo(t_command *cmd)
 
 	i = 1;
 	newline = 1;
-	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
+	while (cmd->args[i] && is_valid_n_flag(cmd->args[i]))
 	{
 		newline = 0;
 		i++;
 	}
 	while (cmd->args[i])
 	{
-		printf("%s", cmd->args[i]);
+		write(1, cmd->args[i], strlen(cmd->args[i]));
 		if (cmd->args[i + 1])
-			printf(" ");
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline)
-		printf("\n");
+		write(1, "\n", 1);
 	return (0);
 }

@@ -38,6 +38,7 @@ t_token	*tokenize(const char *input)
 {
 	t_token	*tokens;
 	int		i;
+	int		ret;
 
 	tokens = NULL;
 	i = 0;
@@ -49,10 +50,13 @@ t_token	*tokenize(const char *input)
 			i = handle_operator_token(input, i, &tokens);
 		else
 		{
-			if (is_assignment_with_quotes(input, i))
-				i = handle_assignment_with_quotes(input, i, &tokens);
-			else
-				i = build_word_token(input, i, &tokens);
+			ret = build_word_token(input, i, &tokens);
+			if (ret == -1)
+			{
+				free_token_list(tokens);
+				return (NULL);
+			}
+			i = ret;
 		}
 	}
 	return (tokens);

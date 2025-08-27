@@ -27,15 +27,10 @@
 # include "signals.h"
 # include "readline/readline.h"
 # include "readline/history.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
 # include <unistd.h>
 # include <signal.h>
-# include <ctype.h>
 # include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
-# include <sys/types.h>
 
 #endif

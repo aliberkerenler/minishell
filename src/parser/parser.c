@@ -12,6 +12,42 @@
 
 #include "../include/main.h"
 
+static void	add_file(t_redir *redir, t_token **current_token)
+{
+	if ((*current_token))
+	{
+		redir->file = ft_strdup((*current_token)->value);
+		if (redir->type == HEREDOC)
+			redir->quote_type = (*current_token)->quote_type;
+	}
+	else
+		redir->file = NULL;
+}
+
+static void	append_redir(t_command *cmd, t_token **current_token)
+{
+	t_redir	*redir;
+	t_redir	*current;
+
+	redir = (t_redir *)malloc(sizeof(t_redir));
+	if (!redir)
+		return ;
+	redir->type = (*current_token)->type;
+	redir->quote_type = 0;
+	*current_token = (*current_token)->next;
+	add_file(redir, current_token);
+	redir->next = NULL;
+	if (!cmd->redirs)
+		cmd->redirs = redir;
+	else
+	{
+		current = cmd->redirs;
+		while (current->next)
+			current = current->next;
+		current->next = redir;
+	}
+}
+
 static t_command	*parse_commands_and_redirections(t_token *tokens)
 {
 	t_command	*cmd_list;

@@ -34,6 +34,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	char			*file;
+	char			quote_type;
 	t_token_type	type;
 	struct s_redir	*next;
 }	t_redir;
@@ -51,5 +52,12 @@ typedef struct s_expansion_context
 	char	**new_args;
 	int		*new_count;
 }	t_expansion_context;
+
+typedef struct s_pipeline_data
+{
+	t_command	*head;
+	int			in_fd;
+	int			pipe_fd[2];
+}	t_pipeline_data;
 
 #endif

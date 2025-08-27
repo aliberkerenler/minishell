@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aerenler <aerenler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/23 21:15:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/08/23 21:15:34 by marvin           ###   ########.fr       */
+/*   Created: 2025/08/26 21:09:49 by aerenler          #+#    #+#             */
+/*   Updated: 2025/08/26 21:09:49 by aerenler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static char	*join_parts(char **parts, int count, int total_len, int boundaries)
 	final_word = malloc(total_len + boundaries + 1);
 	if (!final_word)
 	{
-		while (count-- >= 0)
+		while (--count >= 0)
 			free(parts[count]);
 		return (NULL);
 	}

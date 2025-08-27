@@ -24,14 +24,14 @@ static char	*search_in_path(const char *cmd, char **paths)
 		path = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(path, cmd);
 		free(path);
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, F_OK) == 0)
 			return (full_path);
 		free(full_path);
 	}
 	return (NULL);
 }
 
-char	*get_command_path(const char *cmd)
+char	*get_command_path(const char *cmd, t_shell *shell)
 {
 	char	**paths;
 	char	*path_env;
@@ -41,11 +41,11 @@ char	*get_command_path(const char *cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, X_OK) == 0)
+		if (access(cmd, F_OK) == 0)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-	path_env = getenv("PATH");
+	path_env = get_env_value("PATH", shell);
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':');
@@ -72,6 +72,23 @@ int	is_builtin(char *cmd)
 	while (builtins[i])
 	{
 		if (ft_strcmp(cmd, builtins[i]) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	expand_loop(t_command *cmd, t_shell *shell,
+			t_expansion_context *context)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->args[i])
+	{
+		process_argument_expansion(cmd->args[i], cmd->quote_types[i],
+			shell, context);
+		if (!context->new_args)
 			return (1);
 		i++;
 	}

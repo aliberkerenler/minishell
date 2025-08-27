@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_expand.c                              :+:      :+:    :+:   */
+/*   executor_expand_args.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ualkan <ualkan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aerenler <aerenler@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 16:58:00 by ualkan            #+#    #+#             */
-/*   Updated: 2025/07/28 16:58:00 by ualkan           ###   ########.fr       */
+/*   Created: 2025/08/27 09:24:01 by aerenler          #+#    #+#             */
+/*   Updated: 2025/08/27 09:24:01 by aerenler         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	*expand_variables_with_quotes(const char *str, t_shell *shell,
 	char	*result;
 	int		counters[2];
 
+	if (quote_type == '\'')
+		return (ft_strdup(str));
 	result = (char *)malloc(calculate_expanded_len(str, shell) + 1);
 	if (!result)
 		return (NULL);
@@ -86,7 +88,7 @@ char	*expand_variables_with_quotes(const char *str, t_shell *shell,
 	return (result);
 }
 
-static void	process_argument_expansion(char *arg, char quote_type,
+void	process_argument_expansion(char *arg, char quote_type,
 		t_shell *shell, t_expansion_context *context)
 {
 	char	*expanded;
@@ -112,9 +114,8 @@ static void	process_argument_expansion(char *arg, char quote_type,
 	}
 }
 
-void	expand_command_args(t_command *cmd, t_shell *shell)
+int	expand_command_args(t_command *cmd, t_shell *shell)
 {
-	int					i;
 	int					arg_count;
 	t_expansion_context	context;
 	char				**new_args;
@@ -123,18 +124,17 @@ void	expand_command_args(t_command *cmd, t_shell *shell)
 	arg_count = count_args(cmd->args);
 	new_args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!new_args)
-		return ;
+		return (-1);
 	new_count = 0;
 	context.new_args = new_args;
 	context.new_count = &new_count;
-	i = 0;
-	while (cmd->args[i])
+	if (expand_loop(cmd, shell, &context))
 	{
-		process_argument_expansion(cmd->args[i], cmd->quote_types[i],
-			shell, &context);
-		i++;
+		free_str_array(new_args);
+		return (-1);
 	}
 	new_args[new_count] = NULL;
 	free_str_array(cmd->args);
 	cmd->args = new_args;
+	return (0);
 }

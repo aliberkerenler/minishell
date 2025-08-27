@@ -12,21 +12,6 @@
 
 #include "../include/main.h"
 
-static void	free_args(char **args)
-{
-	int	i;
-
-	if (!args)
-		return ;
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
-}
-
 void	free_command_list(t_command *cmds)
 {
 	t_command	*cmd_tmp;
@@ -35,7 +20,7 @@ void	free_command_list(t_command *cmds)
 	while (cmds)
 	{
 		cmd_tmp = cmds->next_command;
-		free_args(cmds->args);
+		free_str_array(cmds->args);
 		free(cmds->quote_types);
 		while (cmds->redirs)
 		{
